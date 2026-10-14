@@ -1,3 +1,11 @@
+# Home Assistant add-on
+
+This repository now also contains **P2000 RTL-SDR Reliable**, a Home Assistant add-on with strict distance filters, incident classification and MQTT discovery. See [installation and configuration](p2000_reliable/DOCS.md).
+
+The standalone Python receiver below remains unchanged. The reliability fixes described for the add-on apply to `p2000_reliable/`, not the legacy root-level `p2000.py`.
+
+---
+
 # RTL-SDR-P2000Receiver-HA
 Receiving P2000 messages using RTL-SDR stick and post them to Home Assistant and/or MQTT.
 
@@ -39,7 +47,7 @@ sudo raspi-config
 ```
 Select Interface options and then P2 SSH to enable SSH
 Back Finish
-Set your own password for user ‘pi’
+Set your own password for user â€˜piâ€™
 ```
 passwd
 ```

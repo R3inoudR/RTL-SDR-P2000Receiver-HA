@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+*.log
+rootfs.tar.gz
+options.json

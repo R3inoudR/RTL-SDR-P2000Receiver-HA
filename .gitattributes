@@ -1,0 +1,5 @@
+* text=auto
+p2000_reliable/*.py text eol=lf
+p2000_reliable/*.yaml text eol=lf
+p2000_reliable/Dockerfile text eol=lf
+p2000_reliable/*.sqlite3 binary
