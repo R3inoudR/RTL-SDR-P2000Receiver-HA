@@ -1,0 +1,20 @@
+name: Reliable P2000 add-on
+
+on:
+  push:
+    paths: ['p2000_reliable/**', '.github/workflows/reliable-addon.yml']
+  pull_request:
+    paths: ['p2000_reliable/**', '.github/workflows/reliable-addon.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the public runtime
+        run: docker build --build-arg BUILD_ARCH=amd64 --build-arg BUILD_VERSION=1.1.0 -t p2000-reliable:test p2000_reliable
+      - name: Run regression tests without network access
+        run: docker run --rm --network none --entrypoint python3 -v "$PWD/p2000_reliable:/test:ro" p2000-reliable:test /test/test_reliable.py

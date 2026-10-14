@@ -1,0 +1,145 @@
+name: "P2000 RTL-SDR Reliable"
+version: "1.1.0"
+slug: "p2000_reliable"
+description: "Receive P2000 events using Home Assistant and your RTL-SDR dongle"
+startup: application
+boot: auto
+map:
+  - type: ssl
+url: https://github.com/R3inoudR/RTL-SDR-P2000Receiver-HA
+# uart: true
+udev: true
+usb: true
+host_network: false
+hassio_api: true
+arch:
+  - amd64
+services:
+  - mqtt:need
+options:
+  general:
+    verbosity: normal
+  mqtt:
+    ha_autodiscovery: true
+    ha_autodiscovery_topic: homeassistant
+    base_topic: p2000_rtlsdr
+    tls_enabled: false
+    retain: false
+  rtlsdr:
+    cmd: "rtl_fm -f 169.65M -M fm -s 22050 | multimon-ng -a FLEX -t raw -"
+  opencage:
+    enabled: false
+    token: ""
+  p2000_global_filters:
+    ignore_text: "*Test*,*test*,*TEST*"
+    ignore_capcode: "123456789,987654321"
+  p2000_sensors:
+    - id: 2101
+      name: "P2000 GRIP 1 - 30 km"
+      icon: "mdi:alert"
+      zone_radius: 30
+      zone_latitude: 0.0
+      zone_longitude: 0.0
+      grip_level: 1
+    - id: 2102
+      name: "P2000 Zeer grote brand - 20 km"
+      icon: "mdi:fire-alert"
+      zone_radius: 20
+      zone_latitude: 0.0
+      zone_longitude: 0.0
+      incident_type: "zeer_grote_brand"
+    - id: 2103
+      name: "P2000 Middelbrand - 10 km"
+      icon: "mdi:fire-truck"
+      zone_radius: 10
+      zone_latitude: 0.0
+      zone_longitude: 0.0
+      incident_type: "middelbrand"
+    - id: 2104
+      name: "P2000 Grote brand - 15 km"
+      icon: "mdi:fire-alert"
+      zone_radius: 15
+      zone_latitude: 0.0
+      zone_longitude: 0.0
+      incident_type: "grote_brand"
+    - id: 2105
+      name: "P2000 GRIP 2 - 50 km"
+      icon: "mdi:alert"
+      zone_radius: 50
+      zone_latitude: 0.0
+      zone_longitude: 0.0
+      grip_level: 2
+    - id: 2106
+      name: "P2000 GRIP 3 - Nederland"
+      icon: "mdi:alert-octagon"
+      grip_level: 3
+    - id: 2107
+      name: "P2000 GRIP 4 - Nederland"
+      icon: "mdi:alert-octagon"
+      grip_level: 4
+    - id: 2108
+      name: "P2000 Brandweer Lage Zwaluwe - Capcodes"
+      icon: "mdi:fire-truck"
+      capcode: "001200298,001201949"
+    - id: 2109
+      name: "P2000 Brandweer - Zwaluwe en omgeving"
+      icon: "mdi:fire-truck"
+      discipline: "*Brandweer*"
+      towns: "Lage Zwaluwe,Hooge Zwaluwe,Wagenberg,Zevenbergschen Hoek,Moerdijk"
+    - id: 2110
+      name: "P2000 Lifeliners 1-3 - 20 km"
+      icon: "mdi:helicopter"
+      capcode: "000120901,001420059,000923993"
+      zone_radius: 20
+      zone_latitude: 0.0
+      zone_longitude: 0.0
+  tts_replacements:
+    - pattern: P1
+      replacement: Prio 1
+    - pattern: P2
+      replacement: Prio 2
+    - pattern: BOB\-[0-9][0-9]\s
+      replacement: ""
+
+schema:
+  general:
+    verbosity: list(debug|normal)
+  mqtt:
+    host: str?
+    port: int?
+    user: str?
+    password: str?
+    ha_autodiscovery: bool
+    ha_autodiscovery_topic: str
+    base_topic: str
+    tls_enabled: bool
+    tls_ca: str?
+    tls_cert: str?
+    tls_keyfile: str?
+    tls_insecure: bool?
+    retain: bool?
+  rtlsdr:
+    cmd: str
+  opencage:
+    enabled: bool
+    token: str
+  p2000_global_filters:
+    ignore_text: str?
+    ignore_capcode: str?
+  p2000_sensors:
+    - id: int
+      name: str
+      icon: str?
+      incident_type: list(middelbrand|grote_brand|zeer_grote_brand)?
+      grip_level: int(1,4)?
+      towns: str?
+      region: str?
+      keyword: str?
+      capcode: str?
+      discipline: str?
+      zone_radius: float?
+      zone_latitude: float?
+      zone_longitude: float?
+  tts_replacements:
+    - pattern: str
+      replacement: str
